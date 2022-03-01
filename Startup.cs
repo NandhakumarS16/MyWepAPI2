@@ -17,9 +17,11 @@ namespace MyWepAPI2
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddDbContext<CoreDbContext>(op => op.UseSqlServer(Configuration.GetConnectionString("Server=(LocalDB)\\MSSQLLocalDB;Database=CRUDDB;Trusted_Connection=True;"))); //Add       
+            services.AddDbContext<CoreDbContext>(op => op.UseSqlServer(Configuration.GetConnectionString("Database"))); //Add       
             services.AddControllers();
+            
 
+            //Register the swagger generator
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -39,7 +41,10 @@ namespace MyWepAPI2
                 app.UseDeveloperExceptionPage();
             }
 
+            //enable middleware to serve generated SWAGGER as a JSON endpoint. 
             app.UseSwagger();
+
+            //specify the swagger JSON endpoint
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyWebAPI2 V1"); });
             app.UseHttpsRedirection();
             app.UseRouting();
